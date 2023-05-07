@@ -1,80 +1,75 @@
-
-
+dirty_spaces_not_cleaned = []
+possible_positions =[]
 def problems_a_to_f():
     #print('Hi, I am going to solve Problems One by One')
     for i in range(6):
         if i == 0:
             problem_path = "./problems/problem_a_"
-            solution_path= "./solutions/solution_a_"
             #print(problem_path)
-            solve_problem(problem_path, solution_path)
+            #solve_problem(problem_path)
         elif i == 1:
             problem_path = "./problems/problem_b_"
-            solution_path = "./solutions/solution_b_"
             #print(problem_path)
-            solve_problem(problem_path, solution_path)
+            #solve_problem(problem_path)
         elif i == 2:
             problem_path = "./problems/problem_c_"
-            solution_path = "./solutions/solution_c_"
             #print(problem_path)
-            solve_problem(problem_path, solution_path)
+            #solve_problem(problem_path)
         elif i == 3:
             problem_path = "./example-problems/problem_d_"
-            solution_path = "./solutions/solution_d_"
             print(problem_path)
-            solve_problem(problem_path, solution_path)
+            solve_problem(problem_path)
         elif i == 4:
             problem_path = "./problems/problem_e_"
-            solution_path = "./solutions/solution_e_"
             print(problem_path)
-            solve_problem(problem_path,solution_path)
+            #solve_problem(problem_path)
         elif i == 5:
             problem_path = "./problems/problem_f_"
-            solution_path = "./solutions/solution_f_"
             print(problem_path)
-            solve_problem(problem_path, solution_path)
+            #solve_problem(problem_path)
 
 
-def solve_problem(problem_path, solution_path):
+def solve_problem(problem_path):
     increment = 0
     zeros = 0
     completed = 0
-    while completed < 20:
-        file_path = str(problem_path) + str(zeros)+str(increment)+".txt"
-        final_solution_path = str(solution_path) + str(zeros)+str(increment)+".txt"
+  #  while completed < 20:
+        #file_path = str(problem_path) + str(zeros)+str(increment)+".txt"
         #file_path ="./example-problems/problem_c_" + str(zeros)+str(increment)+".txt"
-        if increment == 9:
-            increment = 0
-            zeros += 1
-        else:
-            increment +=1
-        print(file_path)
-        completed = int(str(zeros)+str(increment))
+        #print(file_path)
+        #if increment == 9:
+        #    increment = 0
+        #    zeros += 1
+        #else:
+        #    increment +=1
+        #print(file_path)
+#        completed = int(str(zeros)+str(increment))
 
-    #file_path ="./problems/problem_f_19.txt"
-        print(file_path)
-        with open(file_path, 'r') as f:
-            lines = "garbage"
-            counter = 0
-            problem_list = []
-            while lines != "":
-                # Read lines one by one:
-                lines = f.readline()
-                counter += 1
-                problem_list.append(lines)
-                #print(counter, ":   ", lines)
+    file_path ="./example-problems/problem_e_19.txt"
 
-                #The list items contain \n at the end as file contains end of line characters so to replace them:
-            problem_list = [s.replace('\n', '') for s in problem_list]
-                #print(problem_list)
+    with open(file_path, 'r') as f:
+        lines = "garbage"
+        counter = 0
+        problem_list = []
+        while lines != "":
+            # Read lines one by one:
+            lines = f.readline()
+            counter += 1
+            problem_list.append(lines)
+            #print(counter, ":   ", lines)
 
-            if problem_list[0] == "CHECK PLAN":
-                check_plan(problem_list, final_solution_path)
-            elif problem_list[0] == "FIND PLAN":
-                find_plan(problem_list, final_solution_path)
+            #The list items contain \n at the end as file contains end of line characters so to replace them:
+        problem_list = [s.replace('\n', '') for s in problem_list]
+            #print(problem_list)
+
+        if problem_list[0] == "CHECK PLAN":
+            check_plan(problem_list)
+            pass
+        elif problem_list[0] == "FIND PLAN":
+                find_plan(problem_list)
 
 
-def find_plan(problem_list, final_solution_path):
+def find_plan(problem_list):
     print("I am going to find plan:")
     # removing the first line and getting the map of problem:
     map_list = []
@@ -99,8 +94,6 @@ def find_plan(problem_list, final_solution_path):
     print(x,":", y)
     plan = " "
     plan = create_plan(orientation, x, y, plan, final_map)
-    plan_type=0
-    write_to_file(plan_type, [], plan, final_solution_path)
     print("End Resulted Plan: ", plan)
 
 def create_plan(orientation, x, y, plan, final_map):
@@ -116,11 +109,11 @@ def create_plan(orientation, x, y, plan, final_map):
         cleaned_spaces_visited = []
         cleaned_spaces.append([x, y])
         possible_positions = []
-        orientation = "^"
         while dirty_spaces != []:
             print("Orientation: ", orientation)
-            dirty_spaces, x, y, orientation, sequence, cleaned_spaces = clean_spaces(
-                dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces)
+            orientation= "^"
+            dirty_spaces, x, y, orientation, sequence, cleaned_spaces, cleaned_spaces_visited = clean_spaces(
+                dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces, cleaned_spaces_visited)
             complete_plan += sequence
             print("complete sequence:", complete_plan)
             # dirty_spaces = []
@@ -131,34 +124,14 @@ def create_plan(orientation, x, y, plan, final_map):
             #    if [x, y] in dirty_spaces:
             #        dirty_spaces.remove([x, y])
         return complete_plan
+
     elif orientation is None:
-        print("coming into none orientation")
-        complete_plan = ""
-        position=dirty_spaces[0]
-        x=position[0]
-        y=position[1]
-        origin = (x, y)
-        print(dirty_spaces)
-        print(x,y)
-        cleaned_spaces = []
-        cleaned_spaces_visited = []
-        cleaned_spaces.append([x, y])
-        dirty_spaces.remove([x, y])
-        possible_positions = []
-        orientation = "^"
-        while dirty_spaces != []:
-            print("Orientation: ", orientation)
-            dirty_spaces, x, y, orientation, sequence, cleaned_spaces = clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces)
-            complete_plan += sequence
-            print("complete sequence:", complete_plan)
-            # dirty_spaces = []
-            # if final_map[x-1][y] == "X":
-            #    pass
-            # else:
-            #    x -= 1
-            #    if [x, y] in dirty_spaces:
-            #        dirty_spaces.remove([x, y])
-        return complete_plan
+        final_dirty_spaces_not_cleaned=[]
+        #dirty_spaces_not_cleaned = unknown_orientation_and_position(plan, final_map, dirty_spaces)
+        #for s in dirty_spaces_not_cleaned:
+        #    for a in s:
+        #        final_dirty_spaces_not_cleaned.append(a)
+        return final_dirty_spaces_not_cleaned
     else:
         print("coming into the problem")
         complete_plan = ""
@@ -169,7 +142,7 @@ def create_plan(orientation, x, y, plan, final_map):
         possible_positions=[]
         while dirty_spaces != []:
             print("Orientation: ", orientation)
-            dirty_spaces, x, y, orientation, sequence, cleaned_spaces = clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces)
+            dirty_spaces, x, y, orientation, sequence, cleaned_spaces, cleaned_spaces_visited = clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces, cleaned_spaces_visited)
             complete_plan += sequence
             print("complete sequence:", complete_plan)
                     #dirty_spaces = []
@@ -187,7 +160,7 @@ def create_plan(orientation, x, y, plan, final_map):
     #    dis += abs(A[i] - B[i])
 #def manhattan(a, b, orientation):
 #    return sum(abs(val1-val2) for val1, val2 in zip(a,b))
-def clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces):
+def clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spaces, cleaned_spaces_visited):
     print("finding plan:")
     flag = bool
     sub_plan = ""
@@ -196,8 +169,11 @@ def clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spa
     print("y:",y)
     print("Possible positions: andar janay se pehlay", possible_positions )
     count = 0
+    print("cleaned_spaces_visited: ", cleaned_spaces_visited)
     print(origin)
     print("dirty_spaces:",dirty_spaces)
+    check_if_blocked = is_blocked(final_map, x, y)
+    print(check_if_blocked)
     for i in possible_positions:
         if final_map[i[0]][i[1]] != "X" and [i[0], i[1]] in dirty_spaces and [i[0], i[1]] not in cleaned_spaces:
             print("dirty Spaces", dirty_spaces)
@@ -237,7 +213,7 @@ def clean_spaces(dirty_spaces, x, y, orientation, final_map, origin, cleaned_spa
         sub_plan += instruction
         print(sub_plan)
         flag = True
-    return dirty_spaces, x, y, orientation, sub_plan, cleaned_spaces
+    return dirty_spaces, x, y, orientation, sub_plan, cleaned_spaces, cleaned_spaces_visited
 
 
 def next_move(orientation, x, y, x1, y1, final_map):
@@ -345,7 +321,7 @@ def next_move(orientation, x, y, x1, y1, final_map):
             y-=1
             return orientation, instruction,  x, y
         return orientation, instruction, x, y
-def check_plan(problem_list, final_solution_path):
+def check_plan(problem_list):
     #print("I am going to check the given plan:")
     plan = problem_list[1]
     dirty_spaces_not_cleaned=[]
@@ -380,34 +356,12 @@ def check_plan(problem_list, final_solution_path):
 
     if dirty_spaces_not_cleaned == []:
         print("GOOD PLAN")
-        plan_type = 1
-        write_to_file(plan_type, dirty_spaces_not_cleaned, [], final_solution_path)
     else:
         print("BAD PLAN")
         #print(dirty_spaces_not_cleaned)
         dirty_spaces_not_cleaned= set(tuple(element) for element in dirty_spaces_not_cleaned)
         for x in dirty_spaces_not_cleaned:
             print(x[1], ",", x[0])
-        plan_type = 2
-        write_to_file(plan_type, dirty_spaces_not_cleaned, [], final_solution_path)
-
-
-def write_to_file(plan_type, dirty_spaces_not_cleaned, plan, final_solution_path):
-    f = open(final_solution_path, "w")
-    if plan_type == 1:
-        f.write("GOOD PLAN\n")
-    elif plan_type == 2:
-        f.write("BAD PLAN\n")
-        for x in dirty_spaces_not_cleaned:
-            dirty_space = str(x[1]) +", "+ str(x[0])+"\n"
-            f.write(dirty_space)
-    elif plan_type == 0:
-        f.write(plan)
-    f.close()
-
-    #open and read the file after the appending:
-    #f = open("solutions/a19.txt", "r")
-    #print(f.read())
 
 
 def get_neighbours(x, y, final_map):

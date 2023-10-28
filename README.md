@@ -1,4 +1,4 @@
-# Repository for ss23.1.0.a/og96ipus-1 (SS23 Assignment 1.0.A (Warm-up): Clean the Wumpus Cave)
+# Repository for (Warm-up): Clean the Wumpus Cave)
 
 ******How to run code & verify solution:******
 
